@@ -5,8 +5,7 @@
         "plugin:react/recommended",
         "airbnb-typescript",
         "plugin:jsx-a11y/recommended",
-        "plugin:react-hooks/recommended",
-        "plugin:prettier/recommended"
+        "plugin:react-hooks/recommended"
     ],
     "plugins": [
         "@typescript-eslint",
@@ -44,10 +43,6 @@
             {
                 "avoidEscape": true
             }
-        ],
-        "semi": [
-            "error",
-            "never"
         ]
     },
     "settings": {
