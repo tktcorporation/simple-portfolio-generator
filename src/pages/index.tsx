@@ -18,7 +18,21 @@ type GetStaticProps =
   Promise<{props: {user: UserObj, repos: RepoObj, skills: SkillsObj, history: boolean, others: boolean}}>
 
 export async function getStaticProps(): GetStaticProps {
+  // config.ymlを読み込み
 
+  // https://api.github.com/users/${username}にフェッチ、ユーザーデータを取得
+  // ユーザーデータから分割代入でUserObjを作成
+  // ymlのuserオブジェクトで上書き
+
+  // https://api.github.com/users/${username}/reposにフェッチ、リポジトリデータを取得
+  // フォークリポジトリを除いたリポジトリデータからイテレーターでReposObjを作成
+  // 各リポジトリのOGPを取得
+  // ymlのreposオブジェクトで上書き
+
+  // ReposObjのLanguageからユニークなSkillsObjを作成(valueは空文字)
+  // ymlにskillsがあれば置き換え
+
+  // historyとothersをymlから読み込みreturn
 }
 
 type UserObj = {
