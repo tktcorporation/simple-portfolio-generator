@@ -1,6 +1,7 @@
 import React       from 'react';
-import {NextPage}  from 'next';
-import MainHeading from '@src/components/main-heading/main-heading';
+import {UserObj}   from '@src/types/user-obj.type';
+import {RepoObj}   from '@src/types/repos-obj.type';
+import {SkillsObj} from '@src/types/skill-obj.type';
 
 const Home: NextPage = () => {
   const {APP_NAME} = process.env;
@@ -33,30 +34,4 @@ export async function getStaticProps(): GetStaticProps {
   // ymlにskillsがあれば置き換え
 
   // historyとothersをymlから読み込みreturn
-}
-
-type UserObj = {
-  login: string,
-  name: string | null,
-  avatarUrl: string,
-  gravatarId: string,
-  bio: string | null,
-  htmlUrl: string,
-  email: string | null,
-  company: string | null,
-  location: string | null,
-  socialMedia: {[key: string]: string}
-}
-
-type RepoObj = {
-  [key: string]: {
-    htmlUrl: string,
-    opgUrl: string,
-    description: string | null,
-    language: string
-  }
-}
-
-type SkillsObj = {
-  [key: string]: string
 }
