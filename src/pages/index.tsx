@@ -1,12 +1,13 @@
 import React                         from 'react';
 import _                             from 'lodash';
 import yaml                          from 'js-yaml';
+import * as fs                       from 'fs';
 import {UserObj}                     from '@src/types/user-obj.type';
 import {ReposObj}                    from '@src/types/repos-obj.type';
 import {SkillsObj}                   from '@src/types/skill-obj.type';
 import {RepoData}                    from '@src/types/repo-data.type';
 import {isConfigObj, ReposConfigObj} from '@src/types/config-obj.type';
-import * as fs                       from 'fs';
+import SideCol                       from '@src/components/side-col/side-col';
 
 type HomeProps =
   {user: UserObj, repos: ReposObj, skills: SkillsObj, history: boolean, others: boolean}
@@ -14,7 +15,7 @@ type HomeProps =
 const Home = ({user, repos, skills, history, others}: HomeProps): JSX.Element => {
   return (
     <>
-      {/*<SideCol {...{user}}/>*/}
+      <SideCol {...{user}}/>
       {/*<MainCol {...{repos, skills, history, others}}/>*/}
     </>
   );
@@ -22,7 +23,7 @@ const Home = ({user, repos, skills, history, others}: HomeProps): JSX.Element =>
 
 export default Home;
 
-export async function getStaticProps(): Promise<{props: HomeProps}> {
+export async function getStaticProps(): Promise<{props: HomeProps, revalidate: number}> {
   let config = yaml.load(fs.readFileSync('./config/config.yml', 'utf-8')) as any;
   config     = _.mapValues(config, x => x === null ? {} : x);
 
@@ -39,7 +40,10 @@ export async function getStaticProps(): Promise<{props: HomeProps}> {
   _.merge(skills, config.skills);
 
   // historyとothersをymlから読み込みreturn
-  return {props: {user, repos, skills, history: config.history, others: config.others}};
+  return {
+    props     : {user, repos, skills, history: config.history, others: config.others},
+    revalidate: 60 * 60 * 24 * 3
+  };
 }
 
 async function createUser(username: string): Promise<UserObj> {

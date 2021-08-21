@@ -2,9 +2,8 @@ import {__local__, getStaticProps} from '@src/pages';
 import * as fs                     from 'fs';
 import _                           from 'lodash';
 import fetchMock                   from 'jest-fetch-mock';
-import {dump, load}                from 'js-yaml';
+import {dump}                      from 'js-yaml';
 import {expect}                    from '@jest/globals';
-import {ConfigObj}                 from '@src/types/config-obj.type';
 
 const MOCKS = {
   user : {
@@ -149,12 +148,12 @@ describe('補助関数', () => {
       );
 
       const config = {
-        'todo-app': {
+        'todo-app'        : {
           description: 'TODO管理アプリです',
           language   : ''
         },
-        'SSPG'    : {
-          html_url   : 'https://qiita.com/thesugar/items/47ec3d243d00ddd0b4ed',
+        'personal-website': {
+          html_url   : 'https://github.com/github/personal-website',
           description: 'test'
         }
       };
@@ -164,12 +163,12 @@ describe('補助関数', () => {
 
       // then
       expect(reposConfig).toEqual({
-                                    'todo-app': {
+                                    'todo-app'        : {
                                       description: 'TODO管理アプリです',
                                       language   : ''
                                     },
-                                    'SSPG'    : {
-                                      html_url   : 'https://qiita.com/thesugar/items/47ec3d243d00ddd0b4ed',
+                                    'personal-website': {
+                                      html_url   : 'https://github.com/github/personal-website',
                                       ogp_url    : 'https://image.jpg',
                                       description: 'test'
                                     }
@@ -390,9 +389,14 @@ describe('getStaticProps-本番-', () => {
 
   it('usernameだけの時エラーが起きない', async () => {
     // before
-    const configTmp    = load(originalData) as ConfigObj;
-    configTmp.username = 'takeda0125';
-    fs.writeFileSync('./config/config.yml', dump(configTmp));
+    fs.writeFileSync('./config/config.yml', dump({
+                                                   username: 'takeda0125',
+                                                   user    : null,
+                                                   repos   : null,
+                                                   skills  : null,
+                                                   history : false,
+                                                   others  : false
+                                                 }));
 
     // given
     const props = await getStaticProps();
