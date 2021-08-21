@@ -1,0 +1,23 @@
+username:
+
+user:
+#  bio:
+#  email:
+#  company:
+#  location:
+#  social_media:
+#    twitter_username:
+#    qiita_username:
+
+repos:
+#  some-repo:
+#    description:
+#  other-user's-repo:
+#    html_url:
+#    description:
+
+skills:
+#  JavaScript:
+
+history: false
+others:  false

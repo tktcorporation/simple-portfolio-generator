@@ -1,8 +1,8 @@
-export type RepoObj = {
+export type ReposObj = {
   [key: string]: {
-    htmlUrl: string,
-    opgUrl: string,
-    description: string | null,
-    language: string
+    html_url: string
+    ogp_url: string
+    description: string
+    language?: string | null
   }
 }
