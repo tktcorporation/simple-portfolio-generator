@@ -8,16 +8,17 @@ import {SkillsObj}                   from '@src/types/skill-obj.type';
 import {RepoData}                    from '@src/types/repo-data.type';
 import {isConfigObj, ReposConfigObj} from '@src/types/config-obj.type';
 import SideCol                       from '@src/components/side-col/side-col';
+import MainCol                       from '@src/components/main-col/main-col';
 
 type HomeProps =
   {user: UserObj, repos: ReposObj, skills: SkillsObj, history: boolean, others: boolean}
 
 const Home = ({user, repos, skills, history, others}: HomeProps): JSX.Element => {
   return (
-    <>
+    <div className="d-md-flex min-height-full border-md-bottom">
       <SideCol {...{user}}/>
-      {/*<MainCol {...{repos, skills, history, others}}/>*/}
-    </>
+      <MainCol {...{repos, skills, history, others}}/>
+    </div>
   );
 };
 
