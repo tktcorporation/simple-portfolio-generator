@@ -1,22 +1,23 @@
-import React                         from 'react';
-import _                             from 'lodash';
-import yaml                          from 'js-yaml';
-import * as fs                       from 'fs';
-import {UserObj}                     from '@src/types/user-obj.type';
-import {ReposObj}                    from '@src/types/repos-obj.type';
-import {SkillsObj}                   from '@src/types/skill-obj.type';
-import {RepoData}                    from '@src/types/repo-data.type';
-import {isConfigObj, ReposConfigObj} from '@src/types/config-obj.type';
-import SideCol                       from '@src/components/side-col/side-col';
-import MainCol                       from '@src/components/main-col/main-col';
+import React                                          from 'react';
+import _                                              from 'lodash';
+import yaml                                           from 'js-yaml';
+import * as fs                                        from 'fs';
+import {UserObj}                                      from '@src/types/user-obj.type';
+import {ReposObj}                                     from '@src/types/repos-obj.type';
+import {SkillsObj}                                    from '@src/types/skill-obj.type';
+import {RepoData}                                     from '@src/types/repo-data.type';
+import {isConfigObj, ReposConfigObj}                  from '@src/types/config-obj.type';
+import {isSocialMediaConfigObj, SocialMediaConfigObj} from '@src/types/social-media-config-obj.type';
+import SideCol                                        from '@src/components/side-col/side-col';
+import MainCol                                        from '@src/components/main-col/main-col';
 
 type HomeProps =
-  {user: UserObj, repos: ReposObj, skills: SkillsObj, history: boolean, others: boolean}
+  {user: UserObj, repos: ReposObj, skills: SkillsObj, history: string, others: string, socialMediaConfig: SocialMediaConfigObj}
 
-const Home = ({user, repos, skills, history, others}: HomeProps): JSX.Element => {
+const Home = ({user, repos, skills, history, others, socialMediaConfig}: HomeProps): JSX.Element => {
   return (
     <div className="d-md-flex min-height-full border-md-bottom">
-      <SideCol {...{user}}/>
+      <SideCol {...{user, socialMediaConfig}}/>
       <MainCol {...{repos, skills, history, others}}/>
     </div>
   );
@@ -28,7 +29,7 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
   let config = yaml.load(fs.readFileSync('./config/config.yml', 'utf-8')) as any;
   config     = _.mapValues(config, x => x === null ? {} : x);
 
-  if (!isConfigObj(config)) throw new Error('config.yml include wrong');
+  if (!isConfigObj(config)) throw new Error();
 
   const user = await createUser(config.username);
   _.merge(user, config.user);
@@ -40,9 +41,14 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
 
   _.merge(skills, config.skills);
 
-  // historyとothersをymlから読み込みreturn
+  const history = config.history ? fs.readFileSync('./config/history.md', 'utf-8') : ''
+  const others  = config.others ? fs.readFileSync('./config/others.md', 'utf-8') : ''
+
+  const socialMediaConfig = yaml.load(fs.readFileSync('./config/social-media.yml', 'utf-8'));
+  if (!isSocialMediaConfigObj(socialMediaConfig)) throw new Error();
+
   return {
-    props     : {user, repos, skills, history: config.history, others: config.others},
+    props     : {user, repos, skills, history, others, socialMediaConfig},
     revalidate: 60 * 60 * 24 * 3
   };
 }

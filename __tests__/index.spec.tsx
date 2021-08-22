@@ -299,8 +299,8 @@ describe('getStaticProps', () => {
                             }
                           });
     expect(skills).toEqual({'JavaScript': ''});
-    expect(history).toEqual(false);
-    expect(others).toEqual(false);
+    expect(history).toEqual('');
+    expect(others).toEqual('');
   });
 
   it('config.ymlが書かれている場合も正しく初期化する', async () => {
@@ -332,8 +332,8 @@ describe('getStaticProps', () => {
                               'React': '完全に理解した',
                               'Next' : '完全に理解した'
                             },
-                            history : true,
-                            others  : true
+                            history : false,
+                            others  : false
                           }));
 
     // given
@@ -374,8 +374,8 @@ describe('getStaticProps', () => {
                              'React'     : '完全に理解した',
                              'Next'      : '完全に理解した'
                            });
-    expect(history).toEqual(true);
-    expect(others).toEqual(true);
+    expect(history).toEqual('');
+    expect(others).toEqual('');
   });
 });
 

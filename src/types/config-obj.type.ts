@@ -40,6 +40,8 @@ export function isConfigObj(val: unknown): val is ConfigObj {
 }
 
 function inspectConfig(config: ConfigObj): string {
+  if (typeof config !== 'object')
+    return 'config is not map';
   if (Object.keys(config).some(x => !(['username', 'user', 'repos', 'skills', 'history', 'others'].includes(x))))
     return 'config has a wrong key';
 
