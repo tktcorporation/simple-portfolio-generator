@@ -45,3 +45,17 @@ li ul, li ol {
 .min-height-full {
     min-height: 100vh;
 }
+
+.break-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.wh-20 {
+    width: 20px;
+    height: 20px;
+}
+
+.before-at:before {
+    content: '@';
+}

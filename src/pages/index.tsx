@@ -41,8 +41,8 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
 
   _.merge(skills, config.skills);
 
-  const history = config.history ? fs.readFileSync('./config/history.md', 'utf-8') : ''
-  const others  = config.others ? fs.readFileSync('./config/others.md', 'utf-8') : ''
+  const history = config.history ? fs.readFileSync('./config/history.md', 'utf-8') : '';
+  const others  = config.others ? fs.readFileSync('./config/others.md', 'utf-8') : '';
 
   const socialMediaConfig = yaml.load(fs.readFileSync('./config/social-media.yml', 'utf-8'));
   if (!isSocialMediaConfigObj(socialMediaConfig)) throw new Error();
@@ -62,7 +62,7 @@ async function createUser(username: string): Promise<UserObj> {
   if (!login) throw new Error('user is not exist');
 
   // 値がfalsyなプロパディ除いたオブジェクト
-  const social_media = _.pickBy({blog, twitter_username});
+  const social_media = _.pickBy({blog, twitter: twitter_username});
 
   return {
     login, name, avatar_url, gravatar_id, bio, html_url,

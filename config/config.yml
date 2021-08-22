@@ -1,13 +1,28 @@
 username: takeda0125
 
 user:
-#  bio:
-#  email:
-#  company:
-#  location:
-#  social_media:
-#    twitter_username:
-#    qiita_username:
+  bio:      bio
+  email:    sample@sample.com
+  company:  company
+  location: Japan
+  
+  social_media:
+    behance:       your_username
+    dribbble:      your_username
+    facebook:      your_username
+    hackerrank:    your_username
+    instagram:     your_username
+    keybase:       your_username
+    linkedin:      your_username
+    mastodon:      your_username
+    medium:        your_username
+    stackoverflow: your_user_id
+    telegram:      your_username
+    twitter:       your_username
+    unsplash:      your_username
+    vk:            your_username
+    blog:          http://your_website_url
+    youtube:       your_username
 
 repos:
 #  some-repo:

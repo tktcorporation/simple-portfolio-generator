@@ -63,7 +63,7 @@ describe('補助関数', () => {
                              email       : null,
                              company     : 'company',
                              location    : 'location',
-                             social_media: {blog: 'blog', twitter_username: 'username'}
+                             social_media: {blog: 'blog', twitter: 'username'}
                            });
     });
 
@@ -288,7 +288,7 @@ describe('getStaticProps', () => {
                            email       : null,
                            company     : 'company',
                            location    : 'location',
-                           social_media: {blog: 'blog', twitter_username: 'username'}
+                           social_media: {blog: 'blog', twitter: 'username'}
                          });
     expect(repos).toEqual({
                             'todo-app': {
@@ -314,8 +314,8 @@ describe('getStaticProps', () => {
                               company     : 'other company',
                               location    : 'other location',
                               social_media: {
-                                twitter_username: 'other username',
-                                qiita_username  : 'username'
+                                twitter: 'other username',
+                                qiita  : 'username'
                               }
                             },
                             repos   : {
@@ -351,9 +351,9 @@ describe('getStaticProps', () => {
                            company     : 'other company',
                            location    : 'other location',
                            social_media: {
-                             blog            : 'blog',
-                             twitter_username: 'other username',
-                             qiita_username  : 'username'
+                             blog   : 'blog',
+                             twitter: 'other username',
+                             qiita  : 'username'
                            }
                          });
     expect(repos).toEqual({
