@@ -266,12 +266,13 @@ describe('getStaticProps', () => {
     // before
     fs.writeFileSync('./config/config.yml',
                      dump({
-                            username: 'ao0125',
-                            user    : {},
-                            repos   : {},
-                            skills  : {},
-                            history : false,
-                            others  : false
+                            username     : 'ao0125',
+                            user         : {},
+                            repos        : {},
+                            exclude_repos: [],
+                            skills       : {},
+                            history      : false,
+                            others       : false
                           }));
 
     // given
@@ -307,8 +308,8 @@ describe('getStaticProps', () => {
     // before
     fs.writeFileSync('./config/config.yml',
                      dump({
-                            username: 'ao0125',
-                            user    : {
+                            username     : 'ao0125',
+                            user         : {
                               bio         : 'other bio',
                               email       : 'sample@sample.com',
                               company     : 'other company',
@@ -318,7 +319,7 @@ describe('getStaticProps', () => {
                                 qiita  : 'username'
                               }
                             },
-                            repos   : {
+                            repos        : {
                               'todo-app'        : {
                                 description: 'TODO管理アプリです',
                                 language   : ''
@@ -328,12 +329,13 @@ describe('getStaticProps', () => {
                                 description: 'test'
                               }
                             },
-                            skills  : {
+                            exclude_repos: ['todo-app'],
+                            skills       : {
                               'React': '完全に理解した',
                               'Next' : '完全に理解した'
                             },
-                            history : false,
-                            others  : false
+                            history      : false,
+                            others       : false
                           }));
 
     // given
@@ -357,12 +359,6 @@ describe('getStaticProps', () => {
                            }
                          });
     expect(repos).toEqual({
-                            'todo-app'        : {
-                              html_url   : 'https://github.com/ao0125/todo-app',
-                              ogp_url    : 'https://image.jpg',
-                              description: 'TODO管理アプリです',
-                              language   : ''
-                            },
                             'personal-website': {
                               html_url   : 'https://github.com/github/personal-website',
                               ogp_url    : 'https://image.jpg',
@@ -390,12 +386,13 @@ describe('getStaticProps-本番-', () => {
   it('usernameだけの時エラーが起きない', async () => {
     // before
     fs.writeFileSync('./config/config.yml', dump({
-                                                   username: 'takeda0125',
-                                                   user    : null,
-                                                   repos   : null,
-                                                   skills  : null,
-                                                   history : false,
-                                                   others  : false
+                                                   username     : 'takeda0125',
+                                                   user         : null,
+                                                   repos        : null,
+                                                   exclude_repos: null,
+                                                   skills       : null,
+                                                   history      : false,
+                                                   others       : false
                                                  }));
 
     // given

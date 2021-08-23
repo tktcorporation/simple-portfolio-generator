@@ -30,6 +30,8 @@ repos:
 #  other-user's-repo:
 #    html_url:
 #    description:
+exclude_repos:
+#  - other-repo
 
 skills:
 #  JavaScript:

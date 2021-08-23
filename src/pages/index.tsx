@@ -26,23 +26,31 @@ const Home = ({user, repos, skills, history, others, socialMediaConfig}: HomePro
 export default Home;
 
 export async function getStaticProps(): Promise<{props: HomeProps, revalidate: number}> {
-  let config = yaml.load(fs.readFileSync('./config/config.yml', 'utf-8')) as any;
-  config     = _.mapValues(config, x => x === null ? {} : x);
+  let config = yaml.load(fs.readFileSync('./config/config.yml', 'utf-8')) as {[key: string]: any};
+
+  // 値がnullなプロパティの値を、exclude_reposは空配列・それ以外は空オブジェクトに変換する
+  config = Object.fromEntries(
+    Object.entries(config)
+          .map(([k, v]) => v === null ? k === 'exclude_repos' ? [k, []] : [k, {}]
+                                      : [k, v]));
 
   if (!isConfigObj(config)) throw new Error();
 
   const user = await createUser(config.username);
   _.merge(user, config.user);
 
-  const repos  = await createRepos(config.username);
+  let repos    = await createRepos(config.username);
   const skills = createSkills(repos); // configで上書きする前にlanguageからskillを作る
 
   _.merge(repos, await correctReposConfig(config.repos));
+  repos = _.pickBy(repos, (_v, k) => !(config.exclude_repos.includes(k)));
 
   _.merge(skills, config.skills);
 
-  const history = config.history ? fs.readFileSync('./config/history.md', 'utf-8') : '';
-  const others  = config.others ? fs.readFileSync('./config/others.md', 'utf-8') : '';
+  const history = config.history ? fs.readFileSync('./config/history.md', 'utf-8')
+                                 : '';
+  const others  = config.others ? fs.readFileSync('./config/others.md', 'utf-8')
+                                : '';
 
   const socialMediaConfig = yaml.load(fs.readFileSync('./config/social-media.yml', 'utf-8'));
   if (!isSocialMediaConfigObj(socialMediaConfig)) throw new Error();

@@ -12,6 +12,7 @@ export type ConfigObj = {
     }
   }
   repos: ReposConfigObj
+  exclude_repos: Array<string>
   skills: {
     [key: string]: string
   }
@@ -42,7 +43,8 @@ export function isConfigObj(val: unknown): val is ConfigObj {
 function inspectConfig(config: ConfigObj): string {
   if (typeof config !== 'object')
     return 'config is not map';
-  if (Object.keys(config).some(x => !(['username', 'user', 'repos', 'skills', 'history', 'others'].includes(x))))
+  if (Object.keys(config)
+            .some(x => !(['username', 'user', 'repos', 'exclude_repos', 'skills', 'history', 'others'].includes(x))))
     return 'config has a wrong key';
 
   if (typeof config.username !== 'string')
@@ -54,13 +56,13 @@ function inspectConfig(config: ConfigObj): string {
     return 'user has a wrong key';
   if (config.user.bio !== undefined && typeof config.user.bio !== 'string')
     return 'bio is not string';
-  if (config.user.email !== undefined && typeof config.user?.email !== 'string')
+  if (config.user.email !== undefined && typeof config.user.email !== 'string')
     return 'email is not string';
-  if (config.user.company !== undefined && typeof config.user?.company !== 'string')
+  if (config.user.company !== undefined && typeof config.user.company !== 'string')
     return 'company is not string';
-  if (config.user.location !== undefined && typeof config.user?.location !== 'string')
+  if (config.user.location !== undefined && typeof config.user.location !== 'string')
     return 'location is not string';
-  if (config.user.social_media !== undefined && typeof config.user?.social_media !== 'object')
+  if (config.user.social_media !== undefined && typeof config.user.social_media !== 'object')
     return 'social_media is not map';
   if (_.some(config.user.social_media, (_v, k) => typeof k !== 'string'))
     return 'social_media has a key that is not string';
@@ -75,6 +77,11 @@ function inspectConfig(config: ConfigObj): string {
     return 'any map in repos has a wrong key';
   if (_.some(config.repos, (v, _k) => _.some(v, (v, _k) => typeof v !== 'string')))
     return 'any map in repos has a value that is not string';
+
+  if (!(_.isArray(config.exclude_repos)))
+    return 'exclude_repos is not map';
+  if (config.exclude_repos.some(x => typeof x !== 'string'))
+    return 'exclude_repos has a value that is not string';
 
   if (typeof config.skills !== 'object')
     return 'skills is not map';
