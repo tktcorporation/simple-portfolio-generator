@@ -104,7 +104,7 @@ describe('補助関数', () => {
     });
   });
 
-  describe('createRepos', () => {
+  describe('createReposAndSkills', () => {
     it('正しく作られ、フォークリポジトリは含まない', async () => {
       // before
       fetchMock.mockIf(/https:\/\//, async req => {
@@ -115,7 +115,7 @@ describe('補助関数', () => {
       });
 
       // given
-      const repos = await __local__.createRepos('takeda0125');
+      const repos = await __local__.createReposAndSkills('takeda0125');
 
       // then
       expect(repos).toEqual({
@@ -133,7 +133,7 @@ describe('補助関数', () => {
       fetchMock.mockOnce(JSON.stringify([]));
 
       // given
-      const reposObj = await __local__.createRepos('null');
+      const reposObj = await __local__.createReposAndSkills('null');
 
       // then
       expect(reposObj).toEqual({});

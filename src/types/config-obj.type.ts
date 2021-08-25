@@ -18,7 +18,7 @@ export type ConfigObj = {
   }
   history: boolean
   others: boolean
-  titles: TitlesObj
+  system: SystemConfigObj
 }
 
 export type ReposConfigObj = {
@@ -31,6 +31,13 @@ export type ReposConfigObj = {
     bg_color?: string
     description: string
   }
+}
+
+export type SystemConfigObj = {
+  limit_of_auto_get: number
+  exclude_fork_repo: boolean
+  sort_repos_by: 'star' | 'pushed'
+  titles: TitlesObj
 }
 
 export type TitlesObj = {
@@ -59,7 +66,7 @@ function inspectConfig(config: ConfigObj): string {
     return 'config is not map';
   if (Object.keys(config)
             .some(x => !(['username', 'user', 'repos', 'exclude_repos', 'skills', 'history', 'others',
-                          'titles'].includes(x))))
+                          'system'].includes(x))))
     return 'config has a wrong key';
 
   if (typeof config.username !== 'string')
@@ -95,7 +102,7 @@ function inspectConfig(config: ConfigObj): string {
     return 'any map in repos has a value that is not string';
 
   if (!(_.isArray(config.exclude_repos)))
-    return 'exclude_repos is not map';
+    return 'exclude_repos is not array';
   if (config.exclude_repos.some(x => typeof x !== 'string'))
     return 'exclude_repos has a value that is not string';
 
@@ -111,13 +118,24 @@ function inspectConfig(config: ConfigObj): string {
   if (typeof config.others !== 'boolean')
     return 'others is not boolean';
 
-  if (typeof config.titles !== 'object')
+  if (typeof config.system !== 'object')
+    return 'system is not map';
+  if (Object.keys(config.system)
+            .some(x => !(['limit_of_auto_get', 'sort_repos_by', 'exclude_fork_repo', 'titles'].includes(x))))
+    return 'system has a wrong key';
+  if (typeof config.system.limit_of_auto_get !== 'number')
+    return 'limit_of_auto_get is not number';
+  if (!['star', 'pushed'].includes(config.system.sort_repos_by))
+    return 'sort_repos_by has a wrong value';
+  if (typeof config.system.exclude_fork_repo !== 'boolean')
+    return 'exclude_fork_repo is not boolean';
+  if (typeof config.system.titles !== 'object')
     return 'titles is not map';
-  if (Object.keys(config.titles)
+  if (Object.keys(config.system.titles)
             .some(x => !(['repos', 'repos_sub', 'skills', 'skills_sub', 'history', 'history_sub', 'others',
                           'others_sub'].includes(x))))
     return 'titles has a wrong key';
-  if (_.some(config.titles, (v, _k) => typeof v !== 'string'))
+  if (_.some(config.system.titles, (v, _k) => typeof v !== 'string'))
     return 'titles has a value that is not string';
 
   return '';

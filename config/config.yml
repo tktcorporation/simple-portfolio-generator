@@ -7,33 +7,21 @@ user:
 #  location: Japan
 
 #  social_media:
-#    behance:       your_username
-#    dribbble:      your_username
 #    facebook:      your_username
-#    hackerrank:    your_username
 #    instagram:     your_username
-#    keybase:       your_username
-#    linkedin:      your_username
-#    mastodon:      your_username
-#    medium:        your_username
-#    stackoverflow: your_user_id
-#    telegram:      your_username
 #    twitter:       your_username
-#    unsplash:      your_username
-#    vk:            your_username
 #    blog:          http://your_website_url
 #    youtube:       your_username
 
 repos:
-#  some-repo:
-#    description:
-#  todo-app:
-#    bg_color: white
-#  changelog-support:
-#    html_url:    https://github.com/kondoumh/changelog-support
-#    bg_color:    white
-#    description: VS Code extension to support writing ChangeLog.
-#    language:    JavaScript
+  #  some-repo:
+  #    description:
+  #  todo-app:
+  #    bg_color: white
+  changelog-support:
+    html_url:    https://github.com/kondoumh/changelog-support
+    bg_color:    white
+    description: VS Code extension to support writing ChangeLog.
 #  ogp-checker:
 #    html_url:    https://ogp.buta3.net/
 #    description: 作ったアプリだよ
@@ -47,13 +35,19 @@ skills:
 history:  false
 others:   false
 
-titles:
-#  repos:       Works
-#  repos_sub:   今まで作ってきたアプリのリポジトリ
-#  skills:      Skills
-#  skills_sub:  こんなことできます
-#  history:     Work History
-#  history_sub: インターンも含めた職歴
-#  others:      Books
-#  others_sub:  出版させていただいた本
+system:
+  limit_of_auto_get: 12
+  exclude_fork_repo: true
+  sort_repos_by:     star # star or pushed
+  
+  titles:
+#    repos:       Works
+#    repos_sub:   今まで作ってきたアプリのリポジトリ
+#    skills:      Skills
+#    skills_sub:  こんなことできます
+#    history:     Work History
+#    history_sub: インターンも含めた職歴
+#    others:      Books
+#    others_sub:  出版させていただいた本
+
 

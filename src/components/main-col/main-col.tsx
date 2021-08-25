@@ -5,9 +5,9 @@ import Subtitle    from '@src/components/main-col/subtitle';
 import Repo        from '@src/components/main-col/repo';
 
 const mainColClassName = 'col-md-7 col-lg-8 col-xl-9 px-5 py-6 border-top border-md-top-0 bg-gray-light';
-type MainColProps = {repos: ReposObj, skills: SkillsObj, history: string, others: string, titles: TitlesObj}
+type MainColProps = {repos: ReposObj, skills: SkillsObj, history: string, others: string, titles: TitlesObj, sort_repos_by: string}
 
-const MainCol = ({repos, skills, history, others, titles}: MainColProps): JSX.Element => {
+const MainCol = ({repos, skills, history, others, titles, sort_repos_by}: MainColProps): JSX.Element => {
   return (
     <div className={mainColClassName}>
       <div className="mx-auto" style={{maxWidth: 960}}>
@@ -16,7 +16,14 @@ const MainCol = ({repos, skills, history, others, titles}: MainColProps): JSX.El
                   defaultTitle="GitHub repositories that I've built."/>
 
         <div className="d-flex flex-wrap gutter-condensed mb-4">
-          {Object.entries(repos).map((r) => <Repo repo={r[1]} key={r[0]}/>)}
+          {Object.entries(repos)
+                 .sort((a, b) => {
+                   if (sort_repos_by === 'star')
+                     return b[1].stargazers_count - a[1].stargazers_count;
+                   else
+                     return Date.parse(b[1].pushed_at) - Date.parse(a[1].pushed_at);
+                 })
+                 .map((r) => <Repo repo={r[1]} key={r[0]}/>)}
         </div>
 
         <h2>{titles.skills || 'My Skills'}</h2>

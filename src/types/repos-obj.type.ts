@@ -8,4 +8,6 @@ export type RepoObj = {
   bg_color: string
   description: string
   language?: string | null
+  stargazers_count: number
+  pushed_at: string
 }

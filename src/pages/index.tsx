@@ -1,24 +1,26 @@
-import React                                          from 'react';
-import _                                              from 'lodash';
-import yaml                                           from 'js-yaml';
-import * as fs                                        from 'fs';
-import {UserObj}                                      from '@src/types/user-obj.type';
-import {ReposObj}                                     from '@src/types/repos-obj.type';
-import {SkillsObj}                                    from '@src/types/skill-obj.type';
-import {RepoData}                                     from '@src/types/repo-data.type';
-import {isConfigObj, ReposConfigObj, TitlesObj}       from '@src/types/config-obj.type';
-import {isSocialMediaConfigObj, SocialMediaConfigObj} from '@src/types/social-media-config-obj.type';
-import SideCol                                        from '@src/components/side-col/side-col';
-import MainCol                                        from '@src/components/main-col/main-col';
+import React                                                     from 'react';
+import _                                                         from 'lodash';
+import yaml                                                      from 'js-yaml';
+import * as fs                                                   from 'fs';
+import {UserObj}                                                 from '@src/types/user-obj.type';
+import {ReposObj}                                                from '@src/types/repos-obj.type';
+import {SkillsObj}                                               from '@src/types/skill-obj.type';
+import {RepoData}                                                from '@src/types/repo-data.type';
+import {isConfigObj, ReposConfigObj, SystemConfigObj, TitlesObj} from '@src/types/config-obj.type';
+import {isSocialMediaConfigObj, SocialMediaConfigObj}            from '@src/types/social-media-config-obj.type';
+import SideCol                                                   from '@src/components/side-col/side-col';
+import MainCol                                                   from '@src/components/main-col/main-col';
 
 type HomeProps =
-  {user: UserObj, socialMediaConfig: SocialMediaConfigObj, repos: ReposObj, skills: SkillsObj, history: string, others: string, titles: TitlesObj}
+  {user: UserObj, socialMediaConfig: SocialMediaConfigObj, repos: ReposObj, skills: SkillsObj, history: string, others: string, titles: TitlesObj, sort_repos_by: string}
 
-const Home = ({user, socialMediaConfig, repos, skills, history, others, titles}: HomeProps): JSX.Element => {
+const Home = ({
+                user, socialMediaConfig, repos, skills, history, others, titles, sort_repos_by
+              }: HomeProps): JSX.Element => {
   return (
     <div className="d-md-flex min-height-full border-md-bottom">
       <SideCol {...{user, socialMediaConfig}}/>
-      <MainCol {...{repos, skills, history, others, titles}}/>
+      <MainCol {...{repos, skills, history, others, titles, sort_repos_by}}/>
     </div>
   );
 };
@@ -33,19 +35,24 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
     Object.entries(config)
           .map(([k, v]) => v === null ? k === 'exclude_repos' ? [k, []] : [k, {}]
                                       : [k, v]));
+  config.system.titles ||= {};
 
   if (!isConfigObj(config)) throw new Error();
 
   const user = await createUser(config.username);
   _.merge(user, config.user);
 
-  let repos    = await createRepos(config.username);
-  const skills = createSkills(repos); // configで上書きする前にlanguageからskillを作る
+  let repos: ReposObj   = {};
+  let skills: SkillsObj = {};
 
-  repos = _.pickBy(repos, (_v, k) => !(config.exclude_repos.includes(k)));
+  if (config.system.limit_of_auto_get) {
+    const reposAndSkills = await createReposAndSkills(config.username, config.system, config.exclude_repos);
+    repos                = reposAndSkills.repos;
+    skills               = reposAndSkills.skills;
+  }
+
   fs.writeFileSync('./config/.log', yaml.dump(Object.keys(repos)));
   _.merge(repos, await correctReposConfig(config.repos));
-  repos = _.pickBy(repos, (_v, k) => !(config.exclude_repos.includes(k)));
 
   _.merge(skills, config.skills);
 
@@ -58,7 +65,10 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
   if (!isSocialMediaConfigObj(socialMediaConfig)) throw new Error();
 
   return {
-    props     : {user, socialMediaConfig, repos, skills, history, others, titles: config.titles},
+    props     : {
+      user, socialMediaConfig, repos, skills, history, others, titles: config.system.titles,
+      sort_repos_by                                                  : config.system.sort_repos_by
+    },
     revalidate: 60 * 60 * 24 * 3
   };
 }
@@ -80,22 +90,43 @@ async function createUser(username: string): Promise<UserObj> {
   };
 }
 
-async function createRepos(username: string): Promise<ReposObj> {
-  let reposData: Array<RepoData> =
-        await fetch(`https://api.github.com/users/${username}/repos`).then(res => res.json());
+async function createReposAndSkills(username: string, system: SystemConfigObj, excludeRepos: Array<string>): Promise<{repos: ReposObj, skills: SkillsObj}> {
+  let reposData: Array<RepoData> = [];
+  const skills: SkillsObj        = {};
+  let url: string | null         = `https://api.github.com/users/${username}/repos?page=1`;
 
-  reposData = reposData.filter(r => !r.fork);
+  do {
+    let res: Array<RepoData> = await fetch(`${url}&sort=pushed&per_page=100`).then(res => {
+      if (res.headers?.has('link')) {
+        const matches = /<([^<>]+)>; rel="next"/.exec(res.headers.get('link') as string);
+        url           = matches ? matches[1] : null;
+      }
+
+      return res.json();
+    });
+
+    if (system.exclude_fork_repo) res = res.filter(r => !r.fork);
+
+    reposData = reposData.concat(res);
+  } while (url);
+
+  for (const repo of reposData) if (!repo.fork && repo.language) skills[repo.language] = '';
+
+  if (system.sort_repos_by === 'star')
+    reposData.sort((a, b) => b.stargazers_count - a.stargazers_count);
+
+  reposData.splice(system.limit_of_auto_get);
 
   const promises = reposData.map(async repoData => {
-    let {name, html_url, description, language} = repoData;
+    let {name, html_url, description, language, stargazers_count, pushed_at} = repoData;
 
     const ogp_url = await getOgpUrl(html_url);
     description   = description || ''; // nullの場合に空文字にする
 
-    return [name, {html_url, ogp_url, description, language}];
+    return [name, {html_url, ogp_url, description, language, stargazers_count, pushed_at}];
   });
 
-  return Object.fromEntries(await Promise.all(promises));
+  return {repos: Object.fromEntries(await Promise.all(promises)), skills};
 }
 
 // configで新しく設定されるリポジトリーのOGPを取得する
@@ -120,16 +151,7 @@ async function getOgpUrl(htmlUrl: string): Promise<string> {
   return resultExec ? resultExec[1] : '';
 }
 
-function createSkills(repos: ReposObj): SkillsObj {
-  return _.reduce(repos, (obj, repo) => {
-    if (repo.language && !(repo.language in obj))
-      return _.set(obj, repo.language, '');
-    else
-      return obj;
-  }, {});
-}
-
 // テスト用
 export const __local__ = {
-  createUser, createRepos, correctReposConfig, getOgpUrl, createSkills
+  createUser, createReposAndSkills, correctReposConfig, getOgpUrl
 };
