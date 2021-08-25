@@ -18,16 +18,30 @@ export type ConfigObj = {
   }
   history: boolean
   others: boolean
+  titles: TitlesObj
 }
 
 export type ReposConfigObj = {
   [key: string]: {
     description: string
+    bg_color?: string
     language?: string
   } | {
     html_url: string
+    bg_color?: string
     description: string
   }
+}
+
+export type TitlesObj = {
+  repos?: string
+  repos_sub?: string
+  skills?: string
+  skills_sub?: string
+  history?: string
+  history_sub?: string
+  others?: string
+  others_sub?: string
 }
 
 export function isConfigObj(val: unknown): val is ConfigObj {
@@ -44,7 +58,8 @@ function inspectConfig(config: ConfigObj): string {
   if (typeof config !== 'object')
     return 'config is not map';
   if (Object.keys(config)
-            .some(x => !(['username', 'user', 'repos', 'exclude_repos', 'skills', 'history', 'others'].includes(x))))
+            .some(x => !(['username', 'user', 'repos', 'exclude_repos', 'skills', 'history', 'others',
+                          'titles'].includes(x))))
     return 'config has a wrong key';
 
   if (typeof config.username !== 'string')
@@ -73,7 +88,8 @@ function inspectConfig(config: ConfigObj): string {
     return 'repos is not map';
   if (_.some(config.repos, (_v, k) => typeof k !== 'string'))
     return 'repos has a key that is not string';
-  if (_.some(config.repos, (v, _k) => Object.keys(v).some(x => !(['description', 'language', 'html_url'].includes(x)))))
+  if (_.some(config.repos, (v, _k) => Object.keys(v).some(x => !(['description', 'language', 'html_url',
+                                                                  'bg_color'].includes(x)))))
     return 'any map in repos has a wrong key';
   if (_.some(config.repos, (v, _k) => _.some(v, (v, _k) => typeof v !== 'string')))
     return 'any map in repos has a value that is not string';
@@ -94,6 +110,15 @@ function inspectConfig(config: ConfigObj): string {
     return 'history is not boolean';
   if (typeof config.others !== 'boolean')
     return 'others is not boolean';
+
+  if (typeof config.titles !== 'object')
+    return 'titles is not map';
+  if (Object.keys(config.titles)
+            .some(x => !(['repos', 'repos_sub', 'skills', 'skills_sub', 'history', 'history_sub', 'others',
+                          'others_sub'].includes(x))))
+    return 'titles has a wrong key';
+  if (_.some(config.titles, (v, _k) => typeof v !== 'string'))
+    return 'titles has a value that is not string';
 
   return '';
 }

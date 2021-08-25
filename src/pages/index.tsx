@@ -6,19 +6,19 @@ import {UserObj}                                      from '@src/types/user-obj.
 import {ReposObj}                                     from '@src/types/repos-obj.type';
 import {SkillsObj}                                    from '@src/types/skill-obj.type';
 import {RepoData}                                     from '@src/types/repo-data.type';
-import {isConfigObj, ReposConfigObj}                  from '@src/types/config-obj.type';
+import {isConfigObj, ReposConfigObj, TitlesObj}       from '@src/types/config-obj.type';
 import {isSocialMediaConfigObj, SocialMediaConfigObj} from '@src/types/social-media-config-obj.type';
 import SideCol                                        from '@src/components/side-col/side-col';
 import MainCol                                        from '@src/components/main-col/main-col';
 
 type HomeProps =
-  {user: UserObj, repos: ReposObj, skills: SkillsObj, history: string, others: string, socialMediaConfig: SocialMediaConfigObj}
+  {user: UserObj, socialMediaConfig: SocialMediaConfigObj, repos: ReposObj, skills: SkillsObj, history: string, others: string, titles: TitlesObj}
 
-const Home = ({user, repos, skills, history, others, socialMediaConfig}: HomeProps): JSX.Element => {
+const Home = ({user, socialMediaConfig, repos, skills, history, others, titles}: HomeProps): JSX.Element => {
   return (
     <div className="d-md-flex min-height-full border-md-bottom">
       <SideCol {...{user, socialMediaConfig}}/>
-      <MainCol {...{repos, skills, history, others}}/>
+      <MainCol {...{repos, skills, history, others, titles}}/>
     </div>
   );
 };
@@ -42,6 +42,8 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
   let repos    = await createRepos(config.username);
   const skills = createSkills(repos); // configで上書きする前にlanguageからskillを作る
 
+  repos = _.pickBy(repos, (_v, k) => !(config.exclude_repos.includes(k)));
+  fs.writeFileSync('./config/.log', yaml.dump(Object.keys(repos)));
   _.merge(repos, await correctReposConfig(config.repos));
   repos = _.pickBy(repos, (_v, k) => !(config.exclude_repos.includes(k)));
 
@@ -56,7 +58,7 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
   if (!isSocialMediaConfigObj(socialMediaConfig)) throw new Error();
 
   return {
-    props     : {user, repos, skills, history, others, socialMediaConfig},
+    props     : {user, socialMediaConfig, repos, skills, history, others, titles: config.titles},
     revalidate: 60 * 60 * 24 * 3
   };
 }
@@ -101,12 +103,11 @@ async function correctReposConfig(reposConfig: ReposConfigObj) {
   const promises = Object.entries(reposConfig).map(async ([key, value]) => {
     if (!('html_url' in value)) return [key, value];
 
-    const {html_url, description} = value;
-    const ogp_url                 = await getOgpUrl(html_url);
+    let {html_url, description, bg_color} = value;
+    bg_color                              = bg_color ? bg_color : '';
+    const ogp_url                         = await getOgpUrl(html_url);
 
-    return (
-      [key, {html_url, ogp_url, description}]
-    );
+    return [key, {html_url, ogp_url, bg_color, description}];
   });
 
   return Object.fromEntries(await Promise.all(promises));

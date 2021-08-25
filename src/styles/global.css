@@ -20,11 +20,6 @@
     vertical-align: middle;
 }
 
-h1, h2, h3, h4,
-.highlight {
-    margin-bottom: 16px;
-}
-
 blockquote {
     color: #6a737d;
     border-left: 2px solid #959da5;
@@ -46,6 +41,16 @@ li ul, li ol {
     min-height: 100vh;
 }
 
+.align-items-start {
+    align-items: flex-start;
+}
+
+@media (max-width: 600px) {
+    .col-xs-12 {
+        width: 100%;
+    }
+}
+
 .break-text {
     white-space: pre-wrap;
     word-break: break-word;
@@ -58,4 +63,10 @@ li ul, li ol {
 
 .before-at:before {
     content: '@';
+}
+
+.repo-card-md {
+    max-width: 324px;
+    margin: 1% auto 1% 0;
+    padding: 0 5%;;
 }

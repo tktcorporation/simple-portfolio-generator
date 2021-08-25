@@ -215,9 +215,9 @@ describe('補助関数', () => {
     it('ユニークなオブジェクトを作る', () => {
       // before
       const repos = {
-        a: {html_url: '', ogp_url: '', description: '', language: 'test'},
-        b: {html_url: '', ogp_url: '', description: '', language: 'test'},
-        c: {html_url: '', ogp_url: '', description: '', language: 'test2'}
+        a: {html_url: '', ogp_url: '', bg_color: '', description: '', language: 'test'},
+        b: {html_url: '', ogp_url: '', bg_color: '', description: '', language: 'test'},
+        c: {html_url: '', ogp_url: '', bg_color: '', description: '', language: 'test2'}
       };
 
       // given
@@ -230,7 +230,7 @@ describe('補助関数', () => {
     it('nullを除いたオブジェクトを作る', () => {
       // before
       const repos = {
-        a: {html_url: '', ogp_url: '', description: '', language: null}
+        a: {html_url: '', ogp_url: '', bg_color: '', description: '', language: null}
       };
 
       // given
@@ -272,7 +272,8 @@ describe('getStaticProps', () => {
                             exclude_repos: [],
                             skills       : {},
                             history      : false,
-                            others       : false
+                            others       : false,
+                            titles       : {}
                           }));
 
     // given
@@ -335,7 +336,8 @@ describe('getStaticProps', () => {
                               'Next' : '完全に理解した'
                             },
                             history      : false,
-                            others       : false
+                            others       : false,
+                            titles       : {}
                           }));
 
     // given
@@ -392,7 +394,8 @@ describe('getStaticProps-本番-', () => {
                                                    exclude_repos: null,
                                                    skills       : null,
                                                    history      : false,
-                                                   others       : false
+                                                   others       : false,
+                                                   titles       : {}
                                                  }));
 
     // given
