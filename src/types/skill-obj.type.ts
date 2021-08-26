@@ -1,3 +1,1 @@
-export type SkillsObj = {
-  [key: string]: string
-}
+export type SkillsObj = Array<[string, string]>

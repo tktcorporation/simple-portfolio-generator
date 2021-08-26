@@ -12,12 +12,12 @@ const Repo = ({repo}: reposProps): JSX.Element => {
   let body = '';
   if (repo.description) body = repo.description.startsWith('#') ? repo.description
                                                                 : `### Description\n${repo.description}`;
-  if (repo.language) body = (body || '') + `\n### Language used\n${repo.language}`;
+  if (repo.language) body = (body || '') + `\n### Language\n${repo.language}`;
 
   return (
     <div className="col-6 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-3">
       <div className={cardClassName}>
-        <div className="border-bottom" style={cardStyle}>
+        <div className="border-bottom hover-grow" style={cardStyle}>
           <a href={repo.html_url}>
             <img src={repo.ogp_url} className="d-block mx-auto rounded-1"
                  width="100%" style={{maxWidth: 324, maxHeight: 153.66}}/>

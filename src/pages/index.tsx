@@ -10,17 +10,18 @@ import {isConfigObj, ReposConfigObj, SystemConfigObj, TitlesObj} from '@src/type
 import {isSocialMediaConfigObj, SocialMediaConfigObj}            from '@src/types/social-media-config-obj.type';
 import SideCol                                                   from '@src/components/side-col/side-col';
 import MainCol                                                   from '@src/components/main-col/main-col';
+import {isSkillLogoConfigObj, SkillLogoConfigObj}                from '@src/types/skill-logo-obj.type';
 
 type HomeProps =
-  {user: UserObj, socialMediaConfig: SocialMediaConfigObj, repos: ReposObj, skills: SkillsObj, history: string, others: string, titles: TitlesObj, sort_repos_by: string}
+  {user: UserObj, socialMediaConfig: SocialMediaConfigObj, repos: ReposObj, skills: SkillsObj, skillLogoConfig: SkillLogoConfigObj, history: string, others: string, titles: TitlesObj, sort_repos_by: string}
 
 const Home = ({
-                user, socialMediaConfig, repos, skills, history, others, titles, sort_repos_by
+                user, socialMediaConfig, repos, skills, skillLogoConfig, history, others, titles, sort_repos_by
               }: HomeProps): JSX.Element => {
   return (
     <div className="d-md-flex min-height-full border-md-bottom">
       <SideCol {...{user, socialMediaConfig}}/>
-      <MainCol {...{repos, skills, history, others, titles, sort_repos_by}}/>
+      <MainCol {...{repos, skills, skillLogoConfig, history, others, titles, sort_repos_by}}/>
     </div>
   );
 };
@@ -43,7 +44,7 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
   _.merge(user, config.user);
 
   let repos: ReposObj   = {};
-  let skills: SkillsObj = {};
+  let skills: SkillsObj = [];
 
   if (config.system.limit_of_auto_get) {
     const reposAndSkills = await createReposAndSkills(config.username, config.system, config.exclude_repos);
@@ -54,7 +55,7 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
   fs.writeFileSync('./config/.log', yaml.dump(Object.keys(repos)));
   _.merge(repos, await correctReposConfig(config.repos));
 
-  _.merge(skills, config.skills);
+  skills = _.uniqBy(Object.entries(config.skills).concat(skills), x => x[0]);
 
   const history = config.history ? fs.readFileSync('./config/history.md', 'utf-8')
                                  : '';
@@ -63,11 +64,14 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
 
   const socialMediaConfig = yaml.load(fs.readFileSync('./config/social-media.yml', 'utf-8'));
   if (!isSocialMediaConfigObj(socialMediaConfig)) throw new Error();
+  const skillLogoConfig = yaml.load(fs.readFileSync('./config/skill-logo.yml', 'utf-8'));
+  if (!isSkillLogoConfigObj(skillLogoConfig)) throw new Error();
 
   return {
     props     : {
-      user, socialMediaConfig, repos, skills, history, others, titles: config.system.titles,
-      sort_repos_by                                                  : config.system.sort_repos_by
+      user, socialMediaConfig, repos, skills, skillLogoConfig, history, others,
+      titles       : config.system.titles,
+      sort_repos_by: config.system.sort_repos_by
     },
     revalidate: 60 * 60 * 24 * 3
   };
@@ -91,9 +95,9 @@ async function createUser(username: string): Promise<UserObj> {
 }
 
 async function createReposAndSkills(username: string, system: SystemConfigObj, excludeRepos: Array<string>): Promise<{repos: ReposObj, skills: SkillsObj}> {
-  let reposData: Array<RepoData> = [];
-  const skills: SkillsObj        = {};
-  let url: string | null         = `https://api.github.com/users/${username}/repos?page=1`;
+  let reposData: Array<RepoData>        = [];
+  const skills: {[key: string]: string} = {};
+  let url: string | null                = `https://api.github.com/users/${username}/repos?page=1`;
 
   do {
     let res: Array<RepoData> = await fetch(`${url}&sort=pushed&per_page=100`).then(res => {
@@ -127,7 +131,7 @@ async function createReposAndSkills(username: string, system: SystemConfigObj, e
     return [name, {html_url, ogp_url, description, language, stargazers_count, pushed_at}];
   });
 
-  return {repos: Object.fromEntries(await Promise.all(promises)), skills};
+  return {repos: Object.fromEntries(await Promise.all(promises)), skills: Object.entries(skills)};
 }
 
 // configで新しく設定されるリポジトリーのOGPを取得する

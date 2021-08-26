@@ -1,7 +1,9 @@
-username: github
+username     : github
 
-user:
-#  bio:      bio
+user         :
+  bio: |-
+    bio
+    fhj
 #  email:    sample@sample.com
 #  company:  company
 #  location: Japan
@@ -13,7 +15,7 @@ user:
 #    blog:      http://your_website_url
 #    youtube:   your_username
 
-repos:
+repos        :
 #  some-repo:
 #    description:
 #  todo-app:
@@ -29,23 +31,28 @@ repos:
 exclude_repos:
   - gitignore
 
-skills:
-#  JavaScript: なんかできる
+skills       :
+  JavaScript: |-
+    なん
+    か
+    ああ
+    あ
+  Swift     : 出来ない
 
-history:  false
-others:   false
+history      : false
+others       : false
 
-system:
+system       :
   limit_of_auto_get: 12
   exclude_fork_repo: true
-  sort_repos_by:     star # star or pushed
+  sort_repos_by    : star # star or pushed
   
-  titles:
-#    repos:       Works
-#    repos_sub:   今まで作ってきたアプリのリポジトリ
-#    skills:      Skills
-#    skills_sub:  こんなことできます
-#    history:     Work History
-#    history_sub: インターンも含めた職歴
-#    others:      Books
-#    others_sub:  出版させていただいた本
+  titles           :
+    repos      : Works
+    repos_sub  : 今まで作ってきたアプリのリポジトリ
+    skills     : Skills
+    skills_sub : こんなことできます
+    history    : Work History
+    history_sub: インターンも含めた職歴
+    others     : Books
+    others_sub : 出版させていただいた本

@@ -22,18 +22,22 @@ const MOCKS = {
   repos:
     [
       {
-        name       : 'ao0125.github.io',
-        html_url   : 'https://github.com/ao0125/ao0125.github.io',
-        description: 'Code that\'ll help you kickstart a personal website that showcases your work as a software developer.',
-        fork       : true,
-        language   : 'HTML'
+        name              : 'todo-app',
+        html_url          : 'https://github.com/ao0125/todo-app',
+        description       : null,
+        fork              : false,
+        language          : 'JavaScript',
+        'pushed_at'       : '2021-08-26T02:29:03Z',
+        'stargazers_count': 0
       },
       {
-        name       : 'todo-app',
-        html_url   : 'https://github.com/ao0125/todo-app',
-        description: null,
-        fork       : false,
-        language   : 'JavaScript'
+        name              : 'ao0125.github.io',
+        html_url          : 'https://github.com/ao0125/ao0125.github.io',
+        description       : 'Code that\'ll help you kickstart a personal website that showcases your work as a software developer.',
+        fork              : true,
+        language          : 'HTML',
+        'pushed_at'       : '2021-08-22T05:02:34Z',
+        'stargazers_count': 0
       }
     ]
 };
@@ -105,7 +109,7 @@ describe('補助関数', () => {
   });
 
   describe('createReposAndSkills', () => {
-    it('正しく作られ、フォークリポジトリは含まない', async () => {
+    it('正しく作られる', async () => {
       // before
       fetchMock.mockIf(/https:\/\//, async req => {
         if (req.url.endsWith('/repos'))
