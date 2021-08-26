@@ -27,7 +27,7 @@ repos:
 #    description: 作ったアプリだよ
 
 exclude_repos:
-#  - .github
+  - gitignore
 
 skills:
 #  JavaScript: なんかできる

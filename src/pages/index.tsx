@@ -111,6 +111,7 @@ async function createReposAndSkills(username: string, system: SystemConfigObj, e
   } while (url);
 
   for (const repo of reposData) if (!repo.fork && repo.language) skills[repo.language] = '';
+  reposData = reposData.filter(x => !excludeRepos.includes(x.name));
 
   if (system.sort_repos_by === 'star')
     reposData.sort((a, b) => b.stargazers_count - a.stargazers_count);
