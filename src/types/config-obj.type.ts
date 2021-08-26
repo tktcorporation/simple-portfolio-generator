@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import _                                                                              from 'lodash';
+import {isAllKeyIncluded, isAllString, isAllStringFromArray, isExistsAnd, isIncluded} from '@src/module/tsInspect';
 
 export type ConfigObj = {
   username: string
@@ -62,80 +63,71 @@ export function isConfigObj(val: unknown): val is ConfigObj {
 }
 
 function inspectConfig(config: ConfigObj): string {
-  if (typeof config !== 'object')
+  if (!_.isObject(config))
     return 'config is not map';
-  if (Object.keys(config)
-            .some(x => !(['username', 'user', 'repos', 'exclude_repos', 'skills', 'history', 'others',
-                          'system'].includes(x))))
+  if (!isAllKeyIncluded(config,
+                        ['username', 'user', 'repos', 'exclude_repos', 'skills', 'history', 'others', 'system']))
     return 'config has a wrong key';
-
-  if (typeof config.username !== 'string')
+  if (!_.isString(config.username))
     return 'username is not string';
 
-  if (typeof config.user !== 'object')
+  if (!_.isObject(config.user))
     return 'user is not map';
-  if (Object.keys(config.user).some(x => !(['bio', 'email', 'company', 'location', 'social_media'].includes(x))))
+  if (!isAllKeyIncluded(config.user, ['bio', 'email', 'company', 'location', 'social_media']))
     return 'user has a wrong key';
-  if (config.user.bio !== undefined && typeof config.user.bio !== 'string')
-    return 'bio is not string';
-  if (config.user.email !== undefined && typeof config.user.email !== 'string')
-    return 'email is not string';
-  if (config.user.company !== undefined && typeof config.user.company !== 'string')
-    return 'company is not string';
-  if (config.user.location !== undefined && typeof config.user.location !== 'string')
-    return 'location is not string';
-  if (config.user.social_media !== undefined && typeof config.user.social_media !== 'object')
+  for (const val of ['bio', 'email', 'company', 'location']) {
+    if (!isExistsAnd(config.user[val as keyof typeof config.user], 'string'))
+      return `${val} is not string`;
+  }
+  if (!isExistsAnd(config.user.social_media, 'object'))
     return 'social_media is not map';
-  if (_.some(config.user.social_media, (_v, k) => typeof k !== 'string'))
+  if (!isAllString(config.user.social_media, 'k'))
     return 'social_media has a key that is not string';
-  if (_.some(config.user.social_media, (v, _k) => typeof v !== 'string'))
+  if (!isAllString(config.user.social_media, 'v'))
     return 'social_media has a value that is not string';
 
-  if (typeof config.repos !== 'object')
+  if (!_.isObject(config.repos))
     return 'repos is not map';
-  if (_.some(config.repos, (_v, k) => typeof k !== 'string'))
+  if (!isAllString(config.repos, 'k'))
     return 'repos has a key that is not string';
-  if (_.some(config.repos, (v, _k) => Object.keys(v).some(x => !(['description', 'language', 'html_url',
-                                                                  'bg_color'].includes(x)))))
+  if (!isAllKeyIncluded(Object.values(config.repos), ['description', 'language', 'html_url', 'bg_color']))
     return 'any map in repos has a wrong key';
-  if (_.some(config.repos, (v, _k) => _.some(v, (v, _k) => typeof v !== 'string')))
+  if (!isAllStringFromArray(Object.values(config.repos), 'v'))
     return 'any map in repos has a value that is not string';
 
-  if (!(_.isArray(config.exclude_repos)))
+  if (!_.isArray(config.exclude_repos))
     return 'exclude_repos is not array';
-  if (config.exclude_repos.some(x => typeof x !== 'string'))
+  if (!isAllString(config.exclude_repos, 'v'))
     return 'exclude_repos has a value that is not string';
 
-  if (typeof config.skills !== 'object')
+  if (!_.isObject(config.skills))
     return 'skills is not map';
-  if (_.some(config.skills, (_v, k) => typeof k !== 'string'))
+  if (!isAllString(config.skills, 'k'))
     return 'skills has a key that is not string';
-  if (_.some(config.skills, (v, _k) => typeof v !== 'string'))
+  if (!isAllString(config.skills, 'v'))
     return 'skills has a value that is not string';
 
-  if (typeof config.history !== 'boolean')
+  if (!_.isBoolean(config.history))
     return 'history is not boolean';
-  if (typeof config.others !== 'boolean')
+  if (!_.isBoolean(config.others))
     return 'others is not boolean';
 
-  if (typeof config.system !== 'object')
+  if (!_.isObject(config.system))
     return 'system is not map';
-  if (Object.keys(config.system)
-            .some(x => !(['limit_of_auto_get', 'sort_repos_by', 'exclude_fork_repo', 'titles'].includes(x))))
+  if (!isAllKeyIncluded(config.system, ['limit_of_auto_get', 'sort_repos_by', 'exclude_fork_repo', 'titles']))
     return 'system has a wrong key';
-  if (typeof config.system.limit_of_auto_get !== 'number')
+  if (!_.isNumber(config.system.limit_of_auto_get))
     return 'limit_of_auto_get is not number';
-  if (!['star', 'pushed'].includes(config.system.sort_repos_by))
+  if (!isIncluded(config.system.sort_repos_by, ['star', 'pushed']))
     return 'sort_repos_by has a wrong value';
-  if (typeof config.system.exclude_fork_repo !== 'boolean')
+  if (!_.isBoolean(config.system.exclude_fork_repo))
     return 'exclude_fork_repo is not boolean';
-  if (typeof config.system.titles !== 'object')
+  if (!_.isObject(config.system.titles))
     return 'titles is not map';
-  if (Object.keys(config.system.titles)
-            .some(x => !(['repos', 'repos_sub', 'skills', 'skills_sub', 'history', 'history_sub', 'others',
-                          'others_sub'].includes(x))))
+  if (!isAllKeyIncluded(config.system.titles, ['repos', 'repos_sub', 'skills', 'skills_sub', 'history',
+                                               'history_sub', 'others', 'others_sub']))
     return 'titles has a wrong key';
-  if (_.some(config.system.titles, (v, _k) => typeof v !== 'string'))
+  if (!isAllString(config.system.titles, 'v'))
     return 'titles has a value that is not string';
 
   return '';

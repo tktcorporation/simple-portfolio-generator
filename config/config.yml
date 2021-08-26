@@ -7,30 +7,30 @@ user:
 #  location: Japan
 
 #  social_media:
-#    facebook:      your_username
-#    instagram:     your_username
-#    twitter:       your_username
-#    blog:          http://your_website_url
-#    youtube:       your_username
+#    facebook:  your_username
+#    instagram: your_username
+#    twitter:   your_username
+#    blog:      http://your_website_url
+#    youtube:   your_username
 
 repos:
-  #  some-repo:
-  #    description:
-  #  todo-app:
-  #    bg_color: white
-  changelog-support:
-    html_url:    https://github.com/kondoumh/changelog-support
-    bg_color:    white
-    description: VS Code extension to support writing ChangeLog.
+#  some-repo:
+#    description:
+#  todo-app:
+#    bg_color: white
+#  changelog-support:
+#    html_url:    https://github.com/kondoumh/changelog-support
+#    bg_color:    white
+#    description: VS Code extension to support writing ChangeLog.
 #  ogp-checker:
 #    html_url:    https://ogp.buta3.net/
 #    description: 作ったアプリだよ
 
 exclude_repos:
-  - .github
+#  - .github
 
 skills:
-#  JavaScript:
+#  JavaScript: なんかできる
 
 history:  false
 others:   false
@@ -49,5 +49,3 @@ system:
 #    history_sub: インターンも含めた職歴
 #    others:      Books
 #    others_sub:  出版させていただいた本
-
-
