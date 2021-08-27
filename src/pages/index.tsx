@@ -31,10 +31,10 @@ export default Home;
 export async function getStaticProps(): Promise<{props: HomeProps, revalidate: number}> {
   let config = yaml.load(fs.readFileSync('./config/config.yml', 'utf-8')) as {[key: string]: any};
 
-  // 値がnullなプロパティの値を、exclude_reposは空配列・それ以外は空オブジェクトに変換する
+  // 値がnullなプロパティの値を、exclude_reposとexclude_skillsは空配列・それ以外は空オブジェクトに変換する
   config = Object.fromEntries(
     Object.entries(config)
-          .map(([k, v]) => v === null ? k === 'exclude_repos' ? [k, []] : [k, {}]
+          .map(([k, v]) => v === null ? k.startsWith('exclude') ? [k, []] : [k, {}]
                                       : [k, v]));
   config.system.titles ||= {};
 
@@ -55,6 +55,7 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
   fs.writeFileSync('./config/.log', yaml.dump(Object.keys(repos)));
   _.merge(repos, await correctReposConfig(config.repos));
 
+  skills = skills.filter(x => !config.exclude_skills.includes(x[0]));
   skills = _.uniqBy(Object.entries(config.skills).concat(skills), x => x[0]);
 
   const history = config.history ? fs.readFileSync('./config/history.md', 'utf-8')

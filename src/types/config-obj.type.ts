@@ -17,6 +17,7 @@ export type ConfigObj = {
   skills: {
     [key: string]: string
   }
+  exclude_skills: Array<string>
   history: boolean
   others: boolean
   system: SystemConfigObj
@@ -66,7 +67,8 @@ function inspectConfig(config: ConfigObj): string {
   if (!_.isObject(config))
     return 'config is not map';
   if (!isAllKeyIncluded(config,
-                        ['username', 'user', 'repos', 'exclude_repos', 'skills', 'history', 'others', 'system']))
+                        ['username', 'user', 'repos', 'exclude_repos', 'skills', 'exclude_skills', 'history', 'others',
+                         'system']))
     return 'config has a wrong key';
   if (!_.isString(config.username))
     return 'username is not string';
@@ -106,6 +108,11 @@ function inspectConfig(config: ConfigObj): string {
     return 'skills has a key that is not string';
   if (!isAllString(config.skills, 'v'))
     return 'skills has a value that is not string';
+
+  if (!_.isArray(config.exclude_skills))
+    return 'exclude_skills is not array';
+  if (!isAllString(config.exclude_skills, 'v'))
+    return 'exclude_skills has a value that is not string';
 
   if (!_.isBoolean(config.history))
     return 'history is not boolean';
