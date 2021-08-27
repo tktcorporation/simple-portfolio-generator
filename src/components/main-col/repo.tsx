@@ -6,8 +6,15 @@ const cardClassName = 'github-component position-relative height-full d-flex fle
 type reposProps = {repo: RepoObj}
 
 const Repo = ({repo}: reposProps): JSX.Element => {
-  const cardStyle = repo.bg_color ? {backgroundColor: repo.bg_color}
-                                  : {backgroundImage: `url(${repo.ogp_url})`, backgroundSize: '100%'};
+  let cardStyle;
+  if (repo.bg_color) {
+    cardStyle = {backgroundColor: repo.bg_color};
+  } else {
+    cardStyle =
+      repo.ogp_url.startsWith('https://opengraph.githubassets.com/')
+      ? {backgroundColor: 'white'}
+      : {backgroundImage: `url(${repo.ogp_url})`, backgroundSize: '100%'};
+  }
 
   let body = '';
   if (repo.description) body = repo.description.startsWith('#') ? repo.description
