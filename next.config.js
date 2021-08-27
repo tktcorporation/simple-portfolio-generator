@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-require('dotenv').config()
+require('dotenv').config();
 
 const ENV_VARS = {
-  APP_NAME: process.env.APP_NAME,
-}
+  TOKEN: process.env.TOKEN
+};
 
 module.exports = {
-  env: ENV_VARS,
+  env                : ENV_VARS,
   publicRuntimeConfig: ENV_VARS,
-  poweredByHeader: false,
-}
+  poweredByHeader    : false
+};

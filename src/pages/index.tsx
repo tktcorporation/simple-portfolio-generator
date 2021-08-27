@@ -101,10 +101,8 @@ async function createReposAndSkills(username: string, system: SystemConfigObj, e
 
   do {
     let res: Array<RepoData> = await fetch(`${url}&sort=pushed&per_page=100`).then(res => {
-      if (res.headers?.has('link')) {
-        const matches = /<([^<>]+)>; rel="next"/.exec(res.headers.get('link') as string);
-        url           = matches ? matches[1] : null;
-      }
+      const matches = /<([^<>]+)>; rel="next"/.exec(res.headers.get('link') as string);
+      url           = matches ? matches[1] : null;
 
       return res.json();
     });

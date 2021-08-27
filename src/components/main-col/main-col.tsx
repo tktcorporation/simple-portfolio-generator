@@ -4,6 +4,7 @@ import {TitlesObj}          from '@src/types/config-obj.type';
 import Subtitle             from '@src/components/main-col/subtitle';
 import Repo                 from '@src/components/main-col/repo';
 import Skill                from '@src/components/main-col/skill';
+import ReactMarkdown        from 'react-markdown';
 import {SkillLogoConfigObj} from '@src/types/skill-logo-obj.type';
 
 const mainColClassName = 'col-md-7 col-lg-8 col-xl-9 px-5 py-6 border-top border-md-top-0 bg-gray-light';
@@ -44,7 +45,7 @@ const MainCol = ({
           <Subtitle configTitle={titles.history_sub}
                     defaultTitle="A brief work history."/>
 
-          {/*<Markdown/>*/}
+          {<ReactMarkdown children={history} className="bg-white f4 border border-gray-light px-4 pt-2 mb-4"/>}
         </>}
 
         {others &&
@@ -53,7 +54,7 @@ const MainCol = ({
           <Subtitle configTitle={titles.others_sub}
                     defaultTitle=""/>
 
-          {/*<MarkDown/>*/}
+          {<ReactMarkdown children={others} className="bg-white f4 border border-gray-light px-4 pt-2"/>}
         </>}
       </div>
     </div>
