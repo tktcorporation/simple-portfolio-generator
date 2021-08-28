@@ -11,15 +11,24 @@ import {isSocialMediaConfigObj, SocialMediaConfigObj}            from '@src/type
 import SideCol                                                   from '@src/components/side-col/side-col';
 import MainCol                                                   from '@src/components/main-col/main-col';
 import {isSkillLogoConfigObj, SkillLogoConfigObj}                from '@src/types/skill-logo-obj.type';
+import Head                                                      from 'next/head';
 
 type HomeProps =
   {user: UserObj, socialMediaConfig: SocialMediaConfigObj, repos: ReposObj, skills: SkillsObj, skillLogoConfig: SkillLogoConfigObj, history: string, others: string, titles: TitlesObj, sort_repos_by: string}
 
 const Home = ({
                 user, socialMediaConfig, repos, skills, skillLogoConfig, history, others, titles, sort_repos_by
-              }: HomeProps): JSX.Element => {
+              }: HomeProps) => {
   return (
     <div className="d-md-flex min-height-full border-md-bottom">
+      <Head>
+        <title>{user.login}'s portfolio</title>
+        <meta name="description" content={user.bio || ''}/>
+        <meta property="og:title" content={`${user.login}'s portfolio`}/>
+        <meta property="og:image" content={user.gravatar_id || user.avatar_url}/>
+        <meta property="og:description" content={user.bio || ''}/>
+      </Head>
+
       <SideCol {...{user, socialMediaConfig}}/>
       <MainCol {...{repos, skills, skillLogoConfig, history, others, titles, sort_repos_by}}/>
     </div>
@@ -56,6 +65,8 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
   _.merge(repos, await correctReposConfig(config.repos));
 
   skills = skills.filter(x => !config.exclude_skills.includes(x[0]));
+  fs.appendFileSync('./config/.log', '\n');
+  fs.appendFileSync('./config/.log', yaml.dump(skills.map(x => x[0])));
   skills = _.uniqBy(Object.entries(config.skills).concat(skills), x => x[0]);
 
   const history = config.history ? fs.readFileSync('./config/history.md', 'utf-8')

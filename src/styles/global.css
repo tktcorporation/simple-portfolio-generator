@@ -66,7 +66,6 @@ li ul, li ol {
 }
 
 .repo-card-md {
-    max-width: 324px;
-    margin: 1% auto 1% 0;
-    padding: 0 5%;;
+    margin: 0 auto;
+    padding: 0 5%;
 }

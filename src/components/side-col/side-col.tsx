@@ -18,7 +18,7 @@ const SideCol = ({user, socialMediaConfig}: SideColProps): JSX.Element => {
         <img src={user.gravatar_id || user.avatar_url} className="circle mb-3" style={{maxWidth: 150}}/>
         <h1 className="mb-2 lh-condensed break-text">{user.name || user.login}</h1>
 
-        {user.bio && <p className="mb-3 f4 text-gray break-text">{user.bio}</p>}
+        {user.bio && <p className="mb-3 f5 text-gray break-text">{user.bio}</p>}
 
         <div className="f4 mb-6">
           <div className={metadataStyles}>
