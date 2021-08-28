@@ -149,9 +149,9 @@ async function correctReposConfig(reposConfig: ReposConfigObj) {
   const promises = Object.entries(reposConfig).map(async ([key, value]) => {
     if (!('html_url' in value)) return [key, value];
 
-    let {html_url, description, bg_color} = value;
-    bg_color                              = bg_color ? bg_color : '';
-    const ogp_url                         = await getOgpUrl(html_url);
+    let {html_url, description, bg_color, ogp_url} = value;
+    bg_color                                       = bg_color ? bg_color : '';
+    ogp_url ||= await getOgpUrl(html_url);
 
     return [key, {html_url, ogp_url, bg_color, description}];
   });

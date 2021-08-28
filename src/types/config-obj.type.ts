@@ -30,6 +30,7 @@ export type ReposConfigObj = {
     language?: string
   } | {
     html_url: string
+    ogp_url?: string
     bg_color?: string
     description: string
   }
@@ -92,7 +93,7 @@ function inspectConfig(config: ConfigObj): string {
     return 'repos is not map';
   if (!isAllString(config.repos, 'k'))
     return 'repos has a key that is not string';
-  if (!isAllKeyIncluded(Object.values(config.repos), ['description', 'language', 'html_url', 'bg_color']))
+  if (!isAllKeyIncluded(Object.values(config.repos), ['description', 'language', 'html_url', 'bg_color', 'ogp_url']))
     return 'any map in repos has a wrong key';
   if (!isAllStringFromArray(Object.values(config.repos), 'v'))
     return 'any map in repos has a value that is not string';
