@@ -1,58 +1,43 @@
-username     : github
+username:
 
-user         :
-  bio: |-
-    bio
-    fhj
-#  email:    sample@sample.com
-#  company:  company
-#  location: Japan
-
+user:
+#  bio:
+#  email:
+#  company:
+#  location:
 #  social_media:
-#    facebook:  your_username
-#    instagram: your_username
-#    twitter:   your_username
-#    blog:      http://your_website_url
-#    youtube:   your_username
 
-repos        :
-#  some-repo:
+repos:
+#  sample-repo:
 #    description:
-#  todo-app:
-#    bg_color: white
-#  changelog-support:
-#    html_url:    https://github.com/kondoumh/changelog-support
-#    bg_color:    white
-#    description: VS Code extension to support writing ChangeLog.
-#  ogp-checker:
-#    html_url:    https://ogp.buta3.net/
-#    description: 作ったアプリだよ
+#    language:    ""
+#  sample-app:
+#    html_url:
+#    description:
 
 exclude_repos:
-  - gitignore
+#  - other-repo
 
-skills       :
-  JavaScript: |-
-    なん
-    か
-    ああ
-    あ
-  Swift     : 出来ない
+skills:
+#  language:
 
-history      : false
-others       : false
+exclude_skills:
+#  - other-language
 
-system       :
+history: false
+others:  false
+
+system:
   limit_of_auto_get: 12
   exclude_fork_repo: true
-  sort_repos_by    : star # star or pushed
-  
-  titles           :
-    repos      : Works
-    repos_sub  : 今まで作ってきたアプリのリポジトリ
-    skills     : Skills
-    skills_sub : こんなことできます
-    history    : Work History
-    history_sub: インターンも含めた職歴
-    others     : Books
-    others_sub : 出版させていただいた本
+  sort_repos_by:     star
+
+  titles:
+#    repos:
+#    repos_sub:
+#    skills:
+#    skills_sub:
+#    history:
+#    history_sub:
+#    others:
+#    others_sub:
