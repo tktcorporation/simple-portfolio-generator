@@ -1,3 +1,4 @@
+![spg](https://user-images.githubusercontent.com/85210804/131278423-b3e4d070-99af-43a0-b659-25f290eb3afc.png)
 Create a simple design portfolio automatically!
 
 ## Description
