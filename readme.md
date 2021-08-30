@@ -54,7 +54,6 @@ You only need to work in the `/config`.
     * **location:** Overwrite the obtained location.
     * **social_media:** Specify multiple social network accounts, etc. in the form of `media_name: username`.  
       If you want to specify accounts that are not supported, edit `social-media.yml`.  
-      <br/>
 
 * **repos:**  
   *\# If you want to overwrite the obtained repository*
@@ -70,27 +69,21 @@ You only need to work in the `/config`.
           with the specified URL, specify the URL of an alternative image.
         * **bg_color:** Specify the background color of the repository card.
         * **description:** Specify a description of the app.  
-          <br/>
 
 * **exclude_repos:** Specify repositories not to be displayed in the form of `- repo-name`.  
-  <br/>
 
 * **skills**
     * **name-of-language-or-framework:** Specify the skill description.  
       If you want to specify a language or framework that is not supported, please edit the `skill-logo`.  
-      <br/>
 
 * **exclude_skills:** Specify skills not to be displayed in the form of `- skill-name`.  
-  <br/>
 
 * **history:** If set to true, the job history field will be added to the portfolio and the contents
   of `/config/history.md` will be displayed.  
-  <br/>
 
 * **others:** If set to true, the others field will be added to the portfolio and the contents of `/config/others.md`
   will be displayed.  
   Write your self-promotion and other things that you cannot write in other fields.  
-  <br/>
 
 * **system:**
     * **max_count_repo_show:** Specify the maximum number of repositories to be displayed.
@@ -112,7 +105,11 @@ Set the accounts that can be specified in `social_media` of `user` in `config.ym
 * **media-name:**
     * **profile_url_prefix:** If this property is present, the link will be the URL concatenated with the string
       specified in config.
-    * **icon_svg:** Specify the SVG of the icon.
+    * **icon_svg:** specify HTML such as SVG.
+
+**NOTE**
+
+* `icon_svg` is actually just HTML parsing, so it doesn't have to be svg.
 
 #### skill-logo.yml
 
