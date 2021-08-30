@@ -9,6 +9,9 @@ of [github/personal-website](https://github.com/github/personal-website).
 The goal is to convey more information to the viewers while keeping the beautiful design of the original as much as
 possible.
 
+![image](https://user-images.githubusercontent.com/85210804/131304763-8be89649-9f75-49d1-896e-28296f863f32.png)
+![image](https://user-images.githubusercontent.com/85210804/131305277-449245c6-a3bd-4c02-b5d4-1e6bb7da69b7.png)
+
 ## Getting Started
 
 ### Automatically generate
@@ -31,8 +34,9 @@ possible.
 
 Using GitHub Pages, you can easily publish your portfolio.
 
-If you set the repository name to `{your username}.github.io`, your portfolio will be published
-at `https://{your username}.github.io`.
+If you set the repository name to `{your username}.github.io` and change the `Setting -> Pages ->Source` of the repository to `gh-pages`, the portfolio will be published at `{your username}.github.io`.
+
+![image](https://user-images.githubusercontent.com/85210804/131305954-20268754-1c1e-4e4e-879e-4ee0ff1dff85.png)
 
 ### Editing
 
