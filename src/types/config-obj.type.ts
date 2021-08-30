@@ -37,7 +37,7 @@ export type ReposConfigObj = {
 }
 
 export type SystemConfigObj = {
-  limit_of_auto_get: number
+  max_count_repo_show: number
   exclude_fork_repo: boolean
   sort_repos_by: 'star' | 'pushed'
   titles: TitlesObj
@@ -122,10 +122,10 @@ function inspectConfig(config: ConfigObj): string {
 
   if (!_.isObject(config.system))
     return 'system is not map';
-  if (!isAllKeyIncluded(config.system, ['limit_of_auto_get', 'sort_repos_by', 'exclude_fork_repo', 'titles']))
+  if (!isAllKeyIncluded(config.system, ['max_count_repo_show', 'sort_repos_by', 'exclude_fork_repo', 'titles']))
     return 'system has a wrong key';
-  if (!_.isNumber(config.system.limit_of_auto_get))
-    return 'limit_of_auto_get is not number';
+  if (!_.isNumber(config.system.max_count_repo_show))
+    return 'max_count_repo_show is not number';
   if (!isIncluded(config.system.sort_repos_by, ['star', 'pushed']))
     return 'sort_repos_by has a wrong value';
   if (!_.isBoolean(config.system.exclude_fork_repo))

@@ -9,13 +9,11 @@
     ],
     "plugins": [
         "@typescript-eslint",
-        "jest",
         "react"
     ],
     "env": {
         "es6": true,
-        "browser": true,
-        "jest": true
+        "browser": true
     },
     "rules": {
         "import/prefer-default-export": "off",

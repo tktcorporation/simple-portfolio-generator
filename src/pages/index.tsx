@@ -37,7 +37,7 @@ const Home = ({
 
 export default Home;
 
-export async function getStaticProps(): Promise<{props: HomeProps, revalidate: number}> {
+export async function getStaticProps(): Promise<{props: HomeProps}> {
   let config = yaml.load(fs.readFileSync('./config/config.yml', 'utf-8')) as {[key: string]: any};
 
   // 値がnullなプロパティの値を、exclude_reposとexclude_skillsは空配列・それ以外は空オブジェクトに変換する
@@ -55,7 +55,7 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
   let repos: ReposObj   = {};
   let skills: SkillsObj = [];
 
-  if (config.system.limit_of_auto_get) {
+  if (config.system.max_count_repo_show) {
     const reposAndSkills = await createReposAndSkills(config.username, config.system, config.exclude_repos);
     repos                = reposAndSkills.repos;
     skills               = reposAndSkills.skills;
@@ -80,12 +80,11 @@ export async function getStaticProps(): Promise<{props: HomeProps, revalidate: n
   if (!isSkillLogoConfigObj(skillLogoConfig)) throw new Error();
 
   return {
-    props     : {
+    props: {
       user, socialMediaConfig, repos, skills, skillLogoConfig, history, others,
       titles       : config.system.titles,
       sort_repos_by: config.system.sort_repos_by
-    },
-    revalidate: 60 * 60 * 24 * 3
+    }
   };
 }
 
@@ -98,7 +97,7 @@ async function createUser(username: string): Promise<UserObj> {
   if (!login) throw new Error('user is not exist');
 
   // 値がfalsyなプロパディ除いたオブジェクト
-  const social_media = _.pickBy({blog, twitter: twitter_username});
+  const social_media = _.pickBy({Blog: blog, Twitter: twitter_username});
 
   return {
     login, name, avatar_url, gravatar_id, bio, html_url,
@@ -130,7 +129,7 @@ async function createReposAndSkills(username: string, system: SystemConfigObj, e
   if (system.sort_repos_by === 'star')
     reposData.sort((a, b) => b.stargazers_count - a.stargazers_count);
 
-  reposData.splice(system.limit_of_auto_get);
+  reposData.splice(system.max_count_repo_show);
 
   const promises = reposData.map(async repoData => {
     let {name, html_url, description, language, stargazers_count, pushed_at} = repoData;
@@ -165,8 +164,3 @@ async function getOgpUrl(htmlUrl: string): Promise<string> {
 
   return resultExec ? resultExec[1] : '';
 }
-
-// テスト用
-export const __local__ = {
-  createUser, createReposAndSkills, correctReposConfig, getOgpUrl
-};

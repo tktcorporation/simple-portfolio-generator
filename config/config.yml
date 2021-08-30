@@ -28,9 +28,9 @@ history: false
 others:  false
 
 system:
-  limit_of_auto_get: 12
-  exclude_fork_repo: true
-  sort_repos_by:     star
+  max_count_repo_show: 12
+  exclude_fork_repo:   true
+  sort_repos_by:       star
 
   titles:
 #    repos:

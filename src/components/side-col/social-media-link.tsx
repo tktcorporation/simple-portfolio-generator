@@ -10,9 +10,9 @@ const SocialMediaLink = ({mediaKey, mediaVal, config}: SocialMediaLinkProps): JS
   return (
     <div className="mr-3 mb-3">
       <a href={service.profile_url_prefix + mediaVal} className="tooltipped tooltipped-se"
-         aria-label={`${service.name}: ${mediaVal}`}>
+         aria-label={`${mediaKey}: ${mediaVal}`}>
         <>{parse(service.icon_svg)}</>
-        <span className="d-none">{service.name}</span>
+        <span className="d-none">{mediaKey}</span>
       </a>
     </div>
   );

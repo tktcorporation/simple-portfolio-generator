@@ -3,7 +3,6 @@ import {isAllKeyIncluded, isAllString, isAllStringFromArray} from '@src/module/t
 
 export type  SocialMediaConfigObj = {
   [key: string]: {
-    name: string
     profile_url_prefix?: string
     icon_svg: string
   }
@@ -23,7 +22,7 @@ function inspectSocialMediaConfig(socialMediaConfig: SocialMediaConfigObj) {
     return 'social-media is not map';
   if (!isAllString(socialMediaConfig, 'k'))
     return 'social-media has a key that is not string';
-  if (!isAllKeyIncluded(Object.values(socialMediaConfig), ['name', 'profile_url_prefix', 'icon_svg']))
+  if (!isAllKeyIncluded(Object.values(socialMediaConfig), ['profile_url_prefix', 'icon_svg']))
     return 'any map in social-media has a wrong key';
   if (!isAllStringFromArray(Object.values(socialMediaConfig), 'v'))
     return 'any map in social-media has a value that is not string';
