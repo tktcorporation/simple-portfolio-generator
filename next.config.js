@@ -8,5 +8,6 @@ const ENV_VARS = {
 module.exports = {
   env                : ENV_VARS,
   publicRuntimeConfig: ENV_VARS,
+  assetPrefix        : '/simple-portfolio-generator',
   poweredByHeader    : false
 };
